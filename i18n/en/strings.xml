@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>	
-	<string name="customs">Customs</string>	
+	<string name="customs">Customers</string>	
 	<string name="reservation">Reservation</string>	
-	<string name="store">Store</string>	
+	<string name="store">Stores</string>	
 	<string name="settings">Settings</string>
 	<string name="openWindow">Open New Window</string>
 	<string name="newWindow">New Window</string>	
@@ -11,11 +11,10 @@
 	<string name="fblogin">Facebook Login</string>	
 	<string name="user_signup">User Sign up</string>
 	<string name="signup">Sign up</string>
-	<string name="customs">Customs</string>
 	<string name="confirm_join">Confirm to join the store</string>
-	<string name="accept_join">Accept the custom</string>
-	<string name="insert_custom">Insert Custom</string>	
-	<string name="delete_custom">Deltet Custom</string>	
+	<string name="accept_join">Accept the customer</string>
+	<string name="insert_custom">Insert Customer</string>	
+	<string name="delete_custom">Deltet Customer</string>	
 	<string name="join">Join</string>
 	<string name="deny">Deny</string>
 	<string name="add">Add</string>
@@ -29,7 +28,7 @@
 	<string name="importfb">Import from Facebook</string>
 	<string name="custominfo">Info</string>		
 	<string name="signup1">Email Address</string>
-	<string name="signup2">Enter 6-20 Characters</string>
+	<string name="signup2">Password</string>
 	<string name="signup3">Confirm</string>
 	<string name="signup4">Last Name</string>
 	<string name="signup5">First Name</string>
@@ -67,5 +66,13 @@
 	<string name="se4">This user has joined the store</string>
 	<string name="se5">User not found</string>
 	<string name="se6">Store not found</string>
+	<string name="se7">Work not found</string>
+	<string name="se8">Already be the work's member'</string>
 	<string name="se11">Login fail, please try again later</string>	
+	
+	<string name="works">Works</string>	
+	<string name="updatework">Update Work</string>	
+	<string name="searchhint">Enter user's name or email</string>	
+	<string name="history">History</string>	
+	<string name="waiting_accept">Waiting for accept</string>	
 </resources>

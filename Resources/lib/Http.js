@@ -1,5 +1,5 @@
-//var hosturl = 'http://localhost:54131/';
-var hosturl = 'https://1f45836f2416164b4fe58bd5483acdf111f99426.cloudapp.appcelerator.com/';
+var hosturl = 'http://localhost:51122/';
+//var hosturl = 'https://1f45836f2416164b4fe58bd5483acdf111f99426.cloudapp.appcelerator.com/';
 
 exports.getUrl = function Get(theUrl, callback) {	
 	var client = Ti.Network.createHTTPClient({		

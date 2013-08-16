@@ -76,7 +76,7 @@ exports.createStoreView = function(doc) {
 			color : 'black',
 			font : {fontSize : 20,fontWeight : 'bold'},
 			textAlign : 'left',
-			value : doc.storeName + '(' + doc.ownerName + ')',
+			value : doc.storeName + '(' + doc.name + ')',
 			left : Ti.Platform.displayCaps.platformWidth * 0.1,
 			top : 5,
 			width : Ti.Platform.displayCaps.platformWidth * 0.8,
