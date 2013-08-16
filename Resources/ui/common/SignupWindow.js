@@ -41,8 +41,18 @@ function SignupWindow() {
 			if (tfay[1].value != '') {
 				if (tfay[1].value == tfay[2].value) {
 					function callBack(msg) {						
-						if (msg == '1') {						
-							require('ui/common/SomeEvent').loginSuccess();
+						if (msg == '1') {					
+							var myData = Ti.App.Properties.getObject('myData');
+							if (!myData)
+								myData = {};
+								
+							myData.account = tfay[0].value;
+							myData.password = tfay[1].value;
+							
+							Ti.App.Properties.setObject('myData', myData);
+								
+							var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
+							ApplicationTabGroup().open();	
 						}
 						else
 						  	Ti.UI.createAlertDialog({title:L('Signup_error'), message:L(msg)}).show();						

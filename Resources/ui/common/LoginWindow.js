@@ -8,7 +8,8 @@ function login() {
 		if (tf2.value != '') {
 			function callBack(msg) {
 				if (msg == '1') {
-					require('ui/common/SomeEvent').loginSuccess();
+					var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
+					ApplicationTabGroup().open();	
 				} else {
 					if (msg !== '') {
 						Ti.UI.createAlertDialog({title : L('login_error'), message : msg}).show();
@@ -21,7 +22,13 @@ function login() {
 			data['pw'] = tf2.value;
 			http.post('login', data, callBack);
 			
-			var myData = {account: tf1.value, password: tf2.value};
+			var myData = Ti.App.Properties.getObject('myData');
+			if (!myData) 
+				myData = {};
+				
+			myData.account = tf1.value;
+			myData.password = tf2.value;				
+				
 			Ti.App.Properties.setObject('myData', myData);	
 		} else
 			Ti.UI.createAlertDialog({title : L('login_error'),message : L('ce2')}).show();
@@ -31,12 +38,10 @@ function login() {
 
 function fbLoginSuccess(msg) {
 	if (msg == '1') {
-		require('ui/common/SomeEvent').loginSuccess();
+		var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
+		ApplicationTabGroup().open();	
 	} else
-		Ti.UI.createAlertDialog({
-			title : L('login_error'),
-			message : L(msg)
-		}).show();
+		Ti.UI.createAlertDialog({title : L('login_error'),	message : L(msg)}).show();
 }	
 			
 function connectfacebook() {	

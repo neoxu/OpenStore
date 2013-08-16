@@ -29,17 +29,20 @@ function initCustoms(msg) {
 	} else {
 		if (msg !== '') {			
 			var docs = JSON.parse(msg);
-			pushCustoms(docs);
-			
-			var customsData = {};
-			for (var i = 0; i < docs.length; i++) 
-				customsData[docs[i].name] = docs[i];			
+			if (docs && docs.length > 0) {
+				pushCustoms(docs);
 
-			Ti.App.Properties.setObject('docs', docs);
-			Ti.App.Properties.setObject('customsData', customsData);
-			self.setTitle(L('customs') + ' (' + docs.length + ')');
-			
-			Ti.App.fireEvent('updatePickerRow');
+				var customsData = {};
+				for (var i = 0; i < docs.length; i++)
+					customsData[docs[i].name] = docs[i];
+
+				Ti.App.Properties.setObject('docs', docs);
+				Ti.App.Properties.setObject('customsData', customsData);
+				self.setTitle(L('customs') + ' (' + docs.length + ')');
+
+				Ti.App.fireEvent('updatePickerRow');
+			}
+
 		}
 		else {
 			Ti.App.Properties.setObject('docs', []);
@@ -105,6 +108,79 @@ function answerInvite(e) {
 	}); 
 }
 	
+function findMyWork(msg) {	
+	if (msg !== 'se7') {
+		var work = JSON.parse(msg);
+		if (work && work.waiting) {
+			sectionInviteCustom = Ti.UI.createTableViewSection({
+				headerTitle : L('accept_join')
+			});
+			work.waiting.forEach(function(custom) {
+				var data = {account: custom.account, name : custom.name};
+				var row = common.createTableViewRow(data);
+				var joinBtn = Ti.UI.createButton({
+					title : L('join'),
+					color : 'blue',
+					top : 5,
+					left : Ti.Platform.displayCaps.platformWidth - 120
+				});
+
+				joinBtn.row = row;
+				joinBtn.answer = 1;
+				joinBtn.addEventListener('click', answerAccept);
+				row.add(joinBtn);
+
+				var denyBtn = Ti.UI.createButton({
+					title : L('deny'),
+					color : 'red',
+					top : 5,
+					left : Ti.Platform.displayCaps.platformWidth - 60
+				});
+
+				denyBtn.row = row;
+				denyBtn.answer = 0;
+				denyBtn.addEventListener('click', answerAccept);
+				row.add(denyBtn);
+
+				function answerAccept(e) {
+					var doc = {account: e.source.row.rowData.account, answer: e.source.answer};
+					http.post('updateAcceptJoinWork', doc, function(msg) {
+						
+					   
+					});
+					
+					if (e.source.answer === 1) {
+						var row = common.createTableViewRow(e.source.row.rowData);
+						sectionCustoms.add(row);
+					}
+					
+					sectionInviteCustom.remove(e.source.row);
+					initTableView();
+				}
+
+				sectionInviteCustom.add(row);
+			});
+			
+			sectionCustoms = Ti.UI.createTableViewSection({
+				headerTitle : L('customs')
+			});			
+			
+			if (work.customers) {
+				work.customers.forEach(function(custom) {
+					var data = {
+						account : custom.account,
+						name : custom.name
+					};
+					var row = common.createTableViewRow(data);
+					sectionCustoms.add(row);
+				});
+			}
+
+			initTableView();
+		}
+	}
+}
+
 function findInvite(msg) {
 	var user = JSON.parse(msg);
 	
@@ -112,7 +188,7 @@ function findInvite(msg) {
 		sectionInviteStore = Ti.UI.createTableViewSection({headerTitle : L('confirm_join')});
 		user.forEach(function(store) {
 			var data = {name: store.storeName};
-			row = common.createTableViewRow(data);
+			var row = common.createTableViewRow(data);
 			row.storeData = store;
 			var joinBtn = Ti.UI.createButton({
 				title:L('join'),
@@ -202,6 +278,7 @@ function CustomsWindow() {
 	}
 	
 	http.get('findInviteStore', findInvite);
+	http.get('findMyWork', findMyWork);
 	
 	return self;
 };

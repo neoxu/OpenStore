@@ -22,12 +22,15 @@ function updateInviteMember(msg) {
 	  Ti.UI.createAlertDialog({title : L('invite_error'),message : L(msg)}).show();
 }
 
-function CustomsWindow(storeData) {
+function EditStoreWindow(storeData) {
 	var self = Ti.UI.createWindow({
 		title : storeData.storeName,
-	    backgroundColor : 'transparent',
-		backgroundImage : 'images/grain.png',		
-		barColor : '#6d0a0c'		
+	    //backgroundColor : 'transparent',
+		//backgroundImage : 'images/grain.png',		
+		barColor : '#6d0a0c',
+		height : '50%',
+		opaticy : 0.5,
+		top : 0
 	});
 	
 	var closeBtn = Ti.UI.createButton({title:L('close')});
@@ -41,7 +44,8 @@ function CustomsWindow(storeData) {
 	
 	var myData = Ti.App.Properties.getObject('myData');
 		
-	if (myData.account === storeData.owner) {
+	var canEdit = myData.account === storeData.owner;
+	if (canEdit) {
 		var addbtn = Ti.UI.createButton({title : L('add')});
 		self.setRightNavButton(addbtn);
 		addbtn.addEventListener('click', function() {
@@ -70,7 +74,7 @@ function CustomsWindow(storeData) {
 	sectionMembers = Ti.UI.createTableViewSection({headerTitle : L('openstore3')});
 	
 	tableView = Ti.UI.createTableView({
-		top : 50,
+		top : canEdit ? 50 : 0,
 		style : Titanium.UI.iPhone.TableViewStyle.GROUPED,
 		animationStyle : Titanium.UI.iPhone.RowAnimationStyle.DOWN,
 		data : [sectionWaiting, sectionMembers]
@@ -96,4 +100,4 @@ function CustomsWindow(storeData) {
 	return self; 
 }
 
-module.exports = CustomsWindow;
+module.exports = EditStoreWindow;

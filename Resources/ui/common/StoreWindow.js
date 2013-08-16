@@ -51,14 +51,14 @@ function StoreWindow() {
 		Ti.App.Properties.setObject('membersData', {});
 		var win = require('ui/common/OpenStoreWindow');
 		self.containingTab.open(new win(self));
-	});	 
+	});	 	
 	
 	var editBtn = Ti.UI.createButton({title:L('edit')});
 	self.setLeftNavButton(editBtn);	
 	editBtn.addEventListener('click', function(){
 		if (scrollView.views && scrollView.currentPage >= 0) {
 			var editWin = require('ui/common/EditStoreWindow');			
-			new editWin(scrollView.views[scrollView.currentPage].storeData).open({modal:true});
+			new editWin(scrollView.views[scrollView.currentPage].storeData).open({modal: true});
 		}
 	});	 
 	
