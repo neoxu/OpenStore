@@ -1,7 +1,7 @@
 eclipse.preferences.version=1
 iosLaunchConfigurationAttributes/ATTR_MINIFY=true
-iosLaunchConfigurationAttributes/ATTR_PROJECT_NAME=SuperStylist
-iosLaunchConfigurationAttributes/appid=com.nicemarket.superstylist
+iosLaunchConfigurationAttributes/ATTR_PROJECT_NAME=OpenStore
+iosLaunchConfigurationAttributes/appid=com.nicemarket.openstore
 iosLaunchConfigurationAttributes/certificate=Neo Hsu (3F238P8MGG)
 iosLaunchConfigurationAttributes/keychain=
 iosLaunchConfigurationAttributes/sdk_version=6.1

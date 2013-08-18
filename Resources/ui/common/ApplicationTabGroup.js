@@ -61,26 +61,34 @@ function initStoreGroup(){
 }
 
 function initCustomGroup(){	
+	var storesWin = require('ui/custom/StoreSearchWindow');
 	var worksWin = require('ui/custom/WorksWindow');
 	var historyWin = require('ui/custom/HistoryWindow');
 	var settingWin = require('ui/common/SettingWindow');
-	var win1 = new worksWin();
-	var win2 = new historyWin();
+	var win1 = new storesWin();
+	var win2 = new worksWin();
+	var win3 = new historyWin();
 	var win4 = new settingWin(1);
 
 	ctab1 = Ti.UI.createTab({
-		title : L('works'),
+		title : L('store'),
 		icon : '/images/KS_nav_ui.png',
 		window : win1
 	});
 	win1.containingTab = ctab1;	
 
 	ctab2 = Ti.UI.createTab({
-		title : L('history'),
+		title : L('works'),
 		icon : '/images/KS_nav_ui.png',
 		window : win2
 	});
 	win2.containingTab = ctab2;
+	
+	ctab3 = Ti.UI.createTab({
+		title : L('history'),
+		icon : '/images/KS_nav_views.png',
+		window : win3
+	});
 	
 	ctab4 = Ti.UI.createTab({
 		title : L('settings'),
@@ -91,6 +99,7 @@ function initCustomGroup(){
 
 	self.addTab(ctab1);
 	self.addTab(ctab2);
+	self.addTab(ctab3);
 	self.addTab(ctab4); 	
 }
 
@@ -120,6 +129,7 @@ function ApplicationTabGroup() {
 	Ti.App.addEventListener('switchStore', function(){
 		self.removeTab(ctab1);
 		self.removeTab(ctab2);
+		self.removeTab(ctab3);
 		self.removeTab(ctab4);
 		initStoreGroup();
 	});

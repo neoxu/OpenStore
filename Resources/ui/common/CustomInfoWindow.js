@@ -19,7 +19,7 @@ function CustomInfoWindow(parentWin, doc) {
   		text: doc.name,
   		textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
   		top: 20, left: 50
-	})
+	});
 	self.add(nameLab);
 	
 	var phoneBtn = Ti.UI.createButton({

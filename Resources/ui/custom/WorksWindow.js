@@ -2,6 +2,7 @@ var http = require('lib/Http');
 var common = require('lib/Common');
 var waitingSection;
 var worksSection;
+var seachSection;
 var tableView;
 
 function initTableView() {
@@ -20,32 +21,81 @@ function WorksWindow() {
 		title: L('works'),
 		backgroundImage: 'images/grain.png',
 		barColor: '#b89b00'		
+	});	
+	
+	var backBtn = Ti.UI.createButton({title:L('back'), visible: false});
+	self.setLeftNavButton(backBtn);
+	backBtn.addEventListener('click', function() {
+		backBtn.visible = false;
+		initTableView();
+	});	
+	
+	var search = Titanium.UI.createSearchBar({
+		barColor : '#385292',
+		hintText : 'search',
+		hintText : L('searchhint'),
+		showBookmark : true,
+		showCancel : true,
+		height : 38,
+		top : 0
 	});
 	
-	var button = Ti.UI.createButton({title:L('add'),});
-	self.setRightNavButton(button);
-	button.addEventListener('click', function() {
-		var win = require('ui/custom/UpdateWorkWindow');
-		self.containingTab.open(new win());
-	});		
-	
-	tableView = Ti.UI.createTableView();
-	self.add(tableView);	
-	
-	function addCustomerWaiting(work) {
-		if (!waitingSection) {
-			waitingSection = Ti.UI.createTableViewSection({
-				headerTitle : L('waiting_accept')
+	search.addEventListener('return', function(e) {		
+		if (search.value && search.value !== '') {
+			tableView.setData([]);
+			backBtn.visible = true;
+			var doc = {name : search.value};
+			http.post('findWorks', doc, function(msg) {				
+				seachSection = Ti.UI.createTableViewSection();
+				var docs = JSON.parse(msg);
+				docs.forEach(function(work) {
+					var row = common.createTableViewRow(work);
+					seachSection.add(row);
+					
+					var joinBtn = Ti.UI.createButton({
+						title:L('join'),
+						color: 'blue',
+						top: 5,
+						left: Ti.Platform.displayCaps.platformWidth - 60
+					});
+					row.add(joinBtn);					
+					
+					joinBtn.row = row;
+					joinBtn.addEventListener('click', function(e) {
+						var doc = {account: e.source.row.rowData.account};
+						http.post('updateJoinWork', doc, function(msg) {
+							var work = e.source.row.rowData;
+							if (!waitingSection) {
+								waitingSection = Ti.UI.createTableViewSection({
+									headerTitle : L('waiting_accept')
+								});
+							}
+
+							var row = common.createTableViewRow(work);
+							waitingSection.add(row);
+							
+							if (seachSection.rowCount === 0)
+								initTableView();
+						});
+						
+						seachSection.remove(e.source.row);
+						tableView.setData([seachSection]);
+					});			
+				});
+				
+				tableView.setData([seachSection]);
 			});
 		}
-		
-		var row = common.createTableViewRow(work);
-		waitingSection.add(row);
-		
-		initTableView();		
-	}
+
+		search.blur();
+	});
+	search.addEventListener('cancel', function(e) {
+		search.blur();
+	});	
+	self.add(search);
 	
-	Ti.App.addEventListener('addCustomerWaiting', addCustomerWaiting);
+	tableView = Ti.UI.createTableView({top: search.height});
+	self.add(tableView);			
 	
 	http.get('findMyCustomer', function(msg) {
 		var customer = JSON.parse(msg);		

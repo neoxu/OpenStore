@@ -14,7 +14,7 @@ exports.getUrl = function Get(theUrl, callback) {
     
 	client.open('GET', theUrl);	
     client.send();
-}
+};
 
 exports.get = function Get(theUrl, callback) {	
 	var client = Ti.Network.createHTTPClient({		
@@ -29,7 +29,7 @@ exports.get = function Get(theUrl, callback) {
     
 	client.open('GET', hosturl+theUrl);	
     client.send();
-}
+};
 
 exports.post = function Post(theUrl, jsonData, callback) {		
 	var client = Ti.Network.createHTTPClient({			
@@ -47,4 +47,4 @@ exports.post = function Post(theUrl, jsonData, callback) {
 	client.open('POST', hosturl+theUrl);	
 	client.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');    		
 	client.send(JSON.stringify(jsonData));
-}
+};

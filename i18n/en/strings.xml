@@ -42,8 +42,23 @@
 	<string name="update8">Line</string>
 	<string name="update9">Google+</string>
 	<string name="update10">Skype</string>
+	<string name="setting">Setting</string>
+	<string name="managestore">Manage Store</string>
+	<string name="setmember">Store's Members</string>
+	<string name="settime">Store's Time</string>
+	<string name="setservices">Store's Services</string>
+	<string name="setproduces">Store's Produces</string>
 	<string name="memberemail">Enter member's email</string>
 	<string name="waiting">Waiting for Confirm</string>
+	<string name="time0">Start</string>
+	<string name="time1">End</string>
+	<string name="week0">Sun.</string>
+	<string name="week1">Mon.</string>
+	<string name="week2">Tue.</string>
+	<string name="week3">Wen.</string>
+	<string name="week4">Thi.</string>
+	<string name="week5">Fri.</string>
+	<string name="week6">Sta.</string>
 	<string name="openstore">Open Store</string>
 	<string name="openstore1">Store Name</string>
 	<string name="openstore2">Store URL</string>
@@ -72,7 +87,10 @@
 	
 	<string name="works">Works</string>	
 	<string name="updatework">Update Work</string>	
-	<string name="searchhint">Enter user's name or email</string>	
+	<string name="searchhint">Enter work's name or email</string>
+	<string name="searchhintstore">Enter store's name</string>	
 	<string name="history">History</string>	
 	<string name="waiting_accept">Waiting for accept</string>	
+	<string name="rest">close</string>	
+	<string name="book">Book</string>	
 </resources>

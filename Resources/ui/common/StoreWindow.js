@@ -1,5 +1,6 @@
 var http = require('lib/Http');
 var common = require('lib/Common');
+var manageStore = require('ui/common/EditStoreWindow');
 var scrollView;
 
 function updateWaiting(user) {
@@ -53,13 +54,29 @@ function StoreWindow() {
 		self.containingTab.open(new win(self));
 	});	 	
 	
-	var editBtn = Ti.UI.createButton({title:L('edit')});
+	var opts = {
+		options : [L('setmember'), L('settime'), L('setservices'), L('setproduces')],
+		title : L('managestore')
+	};		
+
+	var editBtn = Ti.UI.createButton({title:L('setting')});
 	self.setLeftNavButton(editBtn);	
 	editBtn.addEventListener('click', function(){
 		if (scrollView.views && scrollView.currentPage >= 0) {
-			var editWin = require('ui/common/EditStoreWindow');			
-			new editWin(scrollView.views[scrollView.currentPage].storeData).open({modal: true});
-		}
+			var dialog = Ti.UI.createOptionDialog(opts);
+			dialog.addEventListener('click', function(e) {
+				switch(e.index) {
+					case 0:
+						manageStore.settingMember(scrollView.views[scrollView.currentPage].storeData).open({modal: true});
+						break;
+					case 1:
+						manageStore.settingTime(scrollView.views[scrollView.currentPage].storeData).open({modal: true});
+						break;
+				}				
+			});
+			
+			dialog.show();			
+		};
 	});	 
 	
 	scrollView = Ti.UI.createScrollableView();
@@ -68,6 +85,12 @@ function StoreWindow() {
 	Ti.App.addEventListener('updateWaiting', updateWaiting);
 	
 	Ti.App.addEventListener('addStores', addStore);
+	
+	Ti.App.addEventListener('updateOpenTime', function(doc){
+		var storeData = scrollView.views[scrollView.currentPage].storeData;	
+		storeData.openTime = doc.openTime;
+		scrollView.views[scrollView.currentPage].storeData = storeData;					
+	});
 	
 	http.get('findStore', initStore); 
 	

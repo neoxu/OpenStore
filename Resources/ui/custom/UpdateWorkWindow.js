@@ -14,12 +14,10 @@ function UpdateWorkWindow() {
 		hintText : L('searchhint'),
 		showBookmark : true,
 		showCancel : true,
-		height : 36,
+		height : 38,
 		top : 0
 	});
-	search.addEventListener('change', function(e) {
-		e.value // search string as user types
-	});
+	
 	search.addEventListener('return', function(e) {		
 		if (search.value && search.value !== '') {
 			var doc = {name : search.value};

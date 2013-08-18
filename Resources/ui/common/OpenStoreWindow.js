@@ -35,6 +35,14 @@ function updateStore() {
 		var m = {account: myData.account, name: myData.name};
 		may.push(m);
 		data['members'] = may; 
+		
+		var days = new Array();
+		for (var i = 0; i < 7; i ++) {
+			day = {open: true, startH: 9, startM: 0, endH: 21, endM: 0};
+			days.push(day);			
+		}
+		
+		data['openTime'] = days;
 	}  
 }
 

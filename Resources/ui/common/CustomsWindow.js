@@ -42,7 +42,6 @@ function initCustoms(msg) {
 
 				Ti.App.fireEvent('updatePickerRow');
 			}
-
 		}
 		else {
 			Ti.App.Properties.setObject('docs', []);
@@ -86,7 +85,7 @@ function answerInvite(e) {
 						storeUrl : e.source.row.storeData.storeUrl,
 						members : e.source.row.storeData.members,
 						waiting : []
-					}
+					};
 							
 					if (e.source.row.storeData.waiting) {
 						for (var i in e.source.row.storeData.waiting) {
@@ -144,8 +143,7 @@ function findMyWork(msg) {
 
 				function answerAccept(e) {
 					var doc = {account: e.source.row.rowData.account, answer: e.source.answer};
-					http.post('updateAcceptJoinWork', doc, function(msg) {
-						
+					http.post('updateAcceptJoinWork', doc, function(msg) {		
 					   
 					});
 					
