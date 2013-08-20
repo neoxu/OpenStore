@@ -1,0 +1,170 @@
+var http = require('lib/Http');
+var common = require('lib/Common');
+
+function UpdateWorkWindow() {
+	var self = Ti.UI.createWindow({
+		title: L('store'),
+		backgroundImage: 'images/grain.png',
+		barColor: '#b89b00'		
+	});
+	
+	var popupWin = common.popup();
+	
+	self.addEventListener('click', function(e) {
+		popupWin.close();
+	});
+
+	var search = Titanium.UI.createSearchBar({
+		barColor : '#385292',
+		hintText : 'search',
+		hintText : L('searchhintstore'),
+		showBookmark : true,
+		showCancel : true,
+		height : 38,
+		top : 0
+	});
+	
+	search.addEventListener('return', function(e) {		
+		if (search.value && search.value !== '') {
+			var doc = {name : search.value};
+			http.post('findWorks', doc, function(msg) {				
+				storesSection = Ti.UI.createTableViewSection();
+				var docs = JSON.parse(msg);
+				docs.forEach(function(work) {
+					var row = common.createTableViewRow(work);
+					storesSection.add(row);					
+					
+				});
+				
+				tableView.setData([storesSection]);
+			});
+		}
+
+		search.blur();
+	});
+	search.addEventListener('cancel', function(e) {
+		search.blur();
+	});	
+	self.add(search);
+	
+	var storesSection = Ti.UI.createTableViewSection();
+	var tableView = Ti.UI.createTableView({top: search.height});
+	self.add(tableView);
+	
+	http.get('findAllStores', function(msg) {
+		var docs = JSON.parse(msg) ;
+		
+		for (var i in docs) {
+			var user = docs[i];
+			if (user.pic_square == null || user.pic_square == undefined)
+				user.pic_square = '/images/user.png';
+
+			var tvRow = Ti.UI.createTableViewRow({
+				height : 'auto',
+				selectedBackgroundColor : '#fff',
+				backgroundColor : '#fff',
+				rowData : user
+			});
+
+			var btn = Ti.UI.createButton({
+				title:L('book'),
+				left: 10,
+				width: 50,
+				top: 50
+			});
+			tvRow.add(btn);
+			btn.addEventListener('click', function(e) {						
+				popupWin.open();
+			});
+			
+			var imageView = Ti.UI.createImageView({
+				image : user.pic_square,
+				top : 0,
+				left : 10,
+				width : 50,
+				height : 50
+			});
+			tvRow.add(imageView);
+
+			if (user.storeName) {
+				var userLabel = Ti.UI.createLabel({
+					font : {fontSize : 16,fontWeight : 'bold'},
+					left : 70,
+					top : 5,
+					right : 5,
+					height : 20,
+					color : '#576996',
+					text : user.storeName
+				});
+				tvRow.add(userLabel);
+			}
+
+			var restStr = '';
+			var openStr = [];
+			for (var i in user.openTime) {
+				if (user.openTime[i].open === false) {
+					restStr += L('week'+i);
+				} else	{
+					var theSameTime = false;
+					for (var j in openStr) {
+						if (user.openTime[i].openH === openStr[j].openH &&
+							user.openTime[i].openM === openStr[j].openM && 
+							user.openTime[i].endH === openStr[j].endH &&
+							user.openTime[i].endM === openStr[j].endM) {
+							theSameTime = true;							
+							openStr[j].days.push(i);
+							break;
+						}
+					}
+					
+					if (theSameTime === false) {
+						var days = [];
+						days.push(i);
+						user.openTime[i].days = days;
+						openStr.push(user.openTime[i]);
+					} 
+				}  
+			};
+			
+			if (restStr !== '')
+			  restStr += ' ' + L('rest');
+			  
+			var status = '';
+			for (var i in openStr) {
+				var dayStr = '';
+				for (var j in openStr[i].days) {
+					if (dayStr === '')
+						dayStr = L('week'+openStr[i].days[j]);
+					else
+					 	dayStr += L('week'+openStr[i].days[j]);
+				}
+				
+				dayStr += openStr[i].startH + ':' + openStr[i].startM + ' - ' + 
+						  openStr[i].endH + ':' + openStr[i].endM + ' ';	
+						  
+				status += dayStr;
+			}
+			
+			status += restStr;
+			
+			var openLabel = Ti.UI.createLabel({
+				font : {fontSize : 14},
+				left : 70,
+				top : 25,
+				right : 20,
+				height : 'auto',
+				color : '#222',
+				text : status
+			});
+			tvRow.add(openLabel);			
+			
+			storesSection.add(tvRow);
+		}
+		
+		tableView.setData([storesSection]);
+	});
+	
+	return self;
+};
+
+module.exports = UpdateWorkWindow;
