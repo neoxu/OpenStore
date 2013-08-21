@@ -110,8 +110,6 @@ function ReservationWindow() {
 	
 	for (var i = 0; i < 7; i ++) {
 		var tabView = Ti.UI.createTableView({
-			style : Titanium.UI.iPhone.TableViewStyle.GROUPED,
-			animationStyle : Titanium.UI.iPhone.RowAnimationStyle.DOWN,
 			editable:true,
 			allowsSelectionDuringEditing:true,
 			headerTitle : getDate(i)

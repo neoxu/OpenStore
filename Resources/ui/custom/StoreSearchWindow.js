@@ -1,5 +1,21 @@
 var http = require('lib/Http');
 var common = require('lib/Common');
+var storesSection;
+var tableView;
+
+function findWorks(name) {
+	var doc = {name : name};
+	http.post('findWorks', doc, function(msg) {
+		storesSection = Ti.UI.createTableViewSection();
+		var docs = JSON.parse(msg);
+		docs.forEach(function(work) {
+			var row = common.createTableViewRow(work);
+			storesSection.add(row);
+		});
+
+		tableView.setData([storesSection]);
+	}); 
+}
 
 function UpdateWorkWindow() {
 	var self = Ti.UI.createWindow({
@@ -14,41 +30,36 @@ function UpdateWorkWindow() {
 		popupWin.close();
 	});
 
-	var search = Titanium.UI.createSearchBar({
-		barColor : '#385292',
-		hintText : 'search',
-		hintText : L('searchhintstore'),
-		showBookmark : true,
-		showCancel : true,
-		height : 38,
-		top : 0
-	});
-	
-	search.addEventListener('return', function(e) {		
-		if (search.value && search.value !== '') {
-			var doc = {name : search.value};
-			http.post('findWorks', doc, function(msg) {				
-				storesSection = Ti.UI.createTableViewSection();
-				var docs = JSON.parse(msg);
-				docs.forEach(function(work) {
-					var row = common.createTableViewRow(work);
-					storesSection.add(row);					
-					
-				});
-				
-				tableView.setData([storesSection]);
-			});
-		}
+	var searchHeigh = 0;
+	if (Ti.Platform.osname === 'mobileweb') {
+		
+	} else {
+		var search = Titanium.UI.createSearchBar({
+			barColor : '#385292',
+			hintText : 'search',
+			hintText : L('searchhintstore'),
+			showBookmark : true,
+			showCancel : true,
+			height : 38,
+			top : 0
+		});
+		
+		searchHeigh = search.height;
 
-		search.blur();
-	});
-	search.addEventListener('cancel', function(e) {
-		search.blur();
-	});	
-	self.add(search);
+		search.addEventListener('return', function(e) {
+			if (search.value && search.value !== '') 
+				findWorks(search.value);
+
+			search.blur();
+		});
+		search.addEventListener('cancel', function(e) {
+			search.blur();
+		});
+		self.add(search); 
+	}
 	
-	var storesSection = Ti.UI.createTableViewSection();
-	var tableView = Ti.UI.createTableView({top: search.height});
+ 	storesSection = Ti.UI.createTableViewSection();
+	tableView = Ti.UI.createTableView({top: searchHeigh});
 	self.add(tableView);
 	
 	http.get('findAllStores', function(msg) {

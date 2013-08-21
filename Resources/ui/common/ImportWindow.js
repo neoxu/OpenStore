@@ -223,15 +223,9 @@ function ImportWindow() {
 	sectionContacts = Ti.UI.createTableViewSection({headerTitle : L('contacts')});
 		
 	tableView = Ti.UI.createTableView({
-		style : Titanium.UI.iPhone.TableViewStyle.GROUPED,
-		animationStyle : Titanium.UI.iPhone.RowAnimationStyle.DOWN,
 		data : [sectionImported, sectionFacebook, sectionContacts]
 	});	
 	
-	/*if (Ti.Platform.osname !== 'mobileweb') {
-		tableView.style = Titanium.UI.iPhone.TableViewStyle.GROUPED;
-		tableView.animationStyle = Titanium.UI.iPhone.RowAnimationStyle.DOWN;
-	}*/		
 	self.add(tableView);		
 	
 	var button = Ti.UI.createButton({title : L('add')});

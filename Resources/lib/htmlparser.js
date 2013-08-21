@@ -54,7 +54,7 @@ var ElementType = {
 	, Script: "script" //Special tag <script>...</script>
 	, Style: "style" //Special tag <style>...</style>
 	, Tag: "tag" //Any tag that isn't special
-}
+};
 
 function Parser (handler, options) {
 	this._options = options ? options : { };
@@ -86,7 +86,7 @@ function Parser (handler, options) {
 		this.reset();
 		this.parseChunk(data);
 		this.done();
-	}
+	};
 
 	//Parses a piece of an HTML document
 	Parser.prototype.parseChunk = function Parser$parseChunk (data) {
@@ -94,7 +94,7 @@ function Parser (handler, options) {
 			this.handleError(new Error("Attempted to parse chunk after parsing already done"));
 		this._buffer += data; //FIXME: this can be a bottleneck
 		this.parseTags();
-	}
+	};
 
 	//Tells the parser that the HTML being parsed is complete
 	Parser.prototype.done = function Parser$done () {
@@ -119,7 +119,7 @@ function Parser (handler, options) {
 
 		this.writeHandler();
 		this._handler.done();
-	}
+	};
 
 	//Resets the parser to a blank state, ready to parse a new HTML document
 	Parser.prototype.reset = function Parser$reset () {
@@ -139,7 +139,7 @@ function Parser (handler, options) {
 		this._prevTagSep = '';
 		this._tagStack = [];
 		this._handler.reset();
-	}
+	};
 
 	//**Private**//
 	//Properties//
@@ -171,7 +171,7 @@ function Parser (handler, options) {
 		}
 
 		return(elements);
-	}
+	};
 
 	//Takes an element and adds an "attribs" property for any element attributes found
 	Parser.prototype.parseAttribs = function Parser$parseAttribs (element) {
@@ -200,7 +200,7 @@ function Parser (handler, options) {
 				element.attribs[match[7]] = match[7];
 			}
 		}
-	}
+	};
 
 	//Extracts the base tag name from the data value of an element
 	Parser.prototype.parseTagName = function Parser$parseTagName (data) {
@@ -210,7 +210,7 @@ function Parser (handler, options) {
 		if (!match)
 			return("");
 		return((match[1] ? "/" : "") + match[2]);
-	}
+	};
 
 	//Parses through HTML text and returns an array of found elements
 	//I admit, this function is rather large but splitting up had an noticeable impact on speed
@@ -382,7 +382,7 @@ function Parser (handler, options) {
 		this._current = 0;
 
 		this.writeHandler();
-	}
+	};
 
 	Parser.prototype.getLocation = function Parser$getLocation (startTag) {
 		var c,
@@ -403,7 +403,7 @@ function Parser (handler, options) {
 			  line: l.row + l.inBuffer + 1
 			, col: l.col + (chunk ? 0: 1)
 		};
-	}
+	};
 
 	//Checks the handler to make it is an object with the right "interface"
 	Parser.prototype.validateHandler = function Parser$validateHandler (handler) {
@@ -421,7 +421,7 @@ function Parser (handler, options) {
 			throw new Error("Handler method 'writeComment' is invalid");
 		if ((typeof handler.writeDirective) != "function")
 			throw new Error("Handler method 'writeDirective' is invalid");
-	}
+	};
 
 	//Writes parsed elements out to the handler
 	Parser.prototype.writeHandler = function Parser$writeHandler (forceFlush) {
@@ -445,14 +445,14 @@ function Parser (handler, options) {
 					break;
 			}
 		}
-	}
+	};
 
 	Parser.prototype.handleError = function Parser$handleError (error) {
 		if ((typeof this._handler.error) == "function")
 			this._handler.error(error);
 		else
 			throw error;
-	}
+	};
 
 //TODO: make this a trully streamable handler
 function RssHandler (callback) {
@@ -553,7 +553,7 @@ inherits(RssHandler, DefaultHandler);
 			this.dom = feed;
 		}
 		RssHandler.super_.prototype.done.call(this);
-	}
+	};
 
 ///////////////////////////////////////////////////
 
@@ -587,7 +587,7 @@ function DefaultHandler (callback, options) {
 		, meta: 1
 		, param: 1
 		, embed: 1
-	}
+	};
 	//Regex to detect whitespace only text nodes
 	DefaultHandler.reWhitespace = /^\s*$/;
 
@@ -602,31 +602,31 @@ function DefaultHandler (callback, options) {
 		this._tagStack = [];
 		this._tagStack.last = function DefaultHandler$_tagStack$last () {
 			return(this.length ? this[this.length - 1] : null);
-		}
-	}
+		};
+	};
 	//Signals the handler that parsing is done
 	DefaultHandler.prototype.done = function DefaultHandler$done () {
 		this._done = true;
 		this.handleCallback(null);
-	}
+	};
 	DefaultHandler.prototype.writeTag = function DefaultHandler$writeTag (element) {
 		this.handleElement(element);
-	}
+	};
 	DefaultHandler.prototype.writeText = function DefaultHandler$writeText (element) {
 		if (this._options.ignoreWhitespace)
 			if (DefaultHandler.reWhitespace.test(element.data))
 				return;
 		this.handleElement(element);
-	}
+	};
 	DefaultHandler.prototype.writeComment = function DefaultHandler$writeComment (element) {
 		this.handleElement(element);
-	}
+	};
 	DefaultHandler.prototype.writeDirective = function DefaultHandler$writeDirective (element) {
 		this.handleElement(element);
-	}
+	};
 	DefaultHandler.prototype.error = function DefaultHandler$error (error) {
 		this.handleCallback(error);
-	}
+	};
 
 	//**Private**//
 	//Properties//
@@ -642,7 +642,7 @@ function DefaultHandler (callback, options) {
 				else
 					return;
 			this._callback(error, this.dom);
-	}
+	};
 
 	DefaultHandler.prototype.isEmptyTag = function(element) {
 		var name = element.name.toLowerCase();
@@ -705,7 +705,7 @@ function DefaultHandler (callback, options) {
 				this._tagStack.last().children.push(element);
 			}
 		}
-	}
+	};
 
 	var DomUtils = {
 		  testElement: function DomUtils$testElement (options, element) {
@@ -800,7 +800,7 @@ function DefaultHandler (callback, options) {
 		, getElementsByTagType: function DomUtils$getElementsByTagType (type, currentElement, recurse, limit) {
 			return(DomUtils.getElements({ tag_type: type }, currentElement, recurse, limit));
 		}
-	}
+	};
 
 	function inherits (ctor, superCtor) {
 		var tempCtor = function(){};

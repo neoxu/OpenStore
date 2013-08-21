@@ -73,8 +73,6 @@ exports.settingMember = function(storeData) {
 	
 	tableView = Ti.UI.createTableView({
 		top : canEdit ? 50 : 0,
-		style : Titanium.UI.iPhone.TableViewStyle.GROUPED,
-		animationStyle : Titanium.UI.iPhone.RowAnimationStyle.DOWN,
 		data : [sectionWaiting, sectionMembers]
 	});	
 	scrollView.add(tableView);
@@ -147,7 +145,6 @@ exports.settingTime = function(storeData) {
 	var bb1 = Titanium.UI.createButtonBar({
 		labels : [L('week0'), L('week1'), L('week2'), L('week3'), L('week4'), L('week5'), L('week6')],
 		backgroundColor : '#336699',		
-		style : Titanium.UI.iPhone.SystemButtonStyle.BAR,
 		width : '100%',
 		top : 0,
 		index : 0
