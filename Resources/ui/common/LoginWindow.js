@@ -71,11 +71,10 @@ function LoginWindow() {
 	if (myData == undefined) 
 		myData = {account: '', password: ''};
 	
-	var uiw = Ti.Platform.displayCaps.platformWidth * 0.9;
 	tf1 = Ti.UI.createTextField({
 		value: myData.account,
 		height:(Ti.Platform.osname==='android') ? Ti.UI.SIZE : 40,
-		width: uiw,
+		width: '90%',
 		top:5,
 		keyboardType:Titanium.UI.KEYBOARD_DEFAULT,
 		returnKeyType:Titanium.UI.RETURNKEY_DONE,
@@ -87,7 +86,7 @@ function LoginWindow() {
 	tf2 = Ti.UI.createTextField({
 		value: myData.password,
 		height:(Ti.Platform.osname==='android') ? Ti.UI.SIZE : 40,
-		width: uiw,
+		width: '90%',
 		top:50,
 		keyboardType:Titanium.UI.KEYBOARD_DEFAULT,
 		returnKeyType:Titanium.UI.RETURNKEY_DONE,
@@ -100,7 +99,7 @@ function LoginWindow() {
 	var loginbtn = Ti.UI.createButton({
 		title:L('login'),
 		height:Ti.UI.SIZE,
-		width: uiw,
+		width: '90%',
 		top:95
 	});
 	self.add(loginbtn);	    	
@@ -110,7 +109,7 @@ function LoginWindow() {
 		var fbBtn = Ti.UI.createButton({
 			title : L('fblogin'),
 			height : Ti.UI.SIZE,
-			width : uiw,
+			width : '90%',
 			bottom : 30
 		});
 		fbBtn.addEventListener('click', function() {
@@ -124,7 +123,7 @@ function LoginWindow() {
 		var fbloginBtn = facebook.createLoginButton({
 			style : facebook.BUTTON_STYLE_WIDE,
 			height : Ti.UI.SIZE,
-			width : uiw,
+			width : '90%',
 			bottom : 30
 		});
 	}

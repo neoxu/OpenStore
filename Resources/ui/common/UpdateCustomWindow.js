@@ -86,13 +86,11 @@ function UpdateCustomWindow(parentWin, doc) {
 	
 	var scrollView = Ti.UI.createScrollView();
 	self.add(scrollView);
-
-	var uiw = Ti.Platform.displayCaps.platformWidth * 0.9;		
 	
 	for (var i=0; i < tfay.length; i ++) {
 		tfay[i] = Ti.UI.createTextField({
 			height : 40,
-			width : uiw,
+			width : '90%',
 			top : i*45 + 5,
 			keyboardType : Titanium.UI.KEYBOARD_DEFAULT,
 			returnKeyType : Titanium.UI.RETURNKEY_DONE,
@@ -118,7 +116,7 @@ function UpdateCustomWindow(parentWin, doc) {
 		var deletBtn = Ti.UI.createButton({
 			title : L('delete'),
 			Color : 'red',
-			width : uiw,
+			width : '90%',
 			top : tfay.length*45+5
 		});		
 		

@@ -8,13 +8,12 @@ function SignupWindow() {
 		barColor: '#6d0a0c'		
 	});
 	
-	var uiw = Ti.Platform.displayCaps.platformWidth * 0.9;
 	var tfay = new Array(5);
 	
 	for (var i = 0; i < tfay.length; i++) {
 		tfay[i] = Ti.UI.createTextField({
 			height : 40,
-			width : uiw,
+			width : '90%',
 			top : 45 * i + 5,
 			keyboardType : Titanium.UI.KEYBOARD_DEFAULT,
 			returnKeyType : Titanium.UI.RETURNKEY_DONE,
@@ -31,7 +30,7 @@ function SignupWindow() {
 	var btn = Ti.UI.createButton({
 		title:L('signup'),
 		height:Ti.UI.SIZE,
-		width: uiw,
+		width: '90%',
 		top:230
 	});
 	self.add(btn);		
