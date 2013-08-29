@@ -1,6 +1,28 @@
 var select = require('lib/soupselect').select;
 var htmlparser = require('lib/htmlparser');
 
+exports.setRightNavButton = function(win, btn) {
+	if (Ti.Platform.osname === 'android') {
+		btn.bottom = 0;
+		btn.left = '50%';
+		btn.width = '50%';	
+		win.add(btn);
+	}
+	else 
+		win.setRightNavButton(btn);	
+};
+
+exports.setLeftNavButton = function(win, btn) {
+	if (Ti.Platform.osname === 'android') {
+		btn.bottom = 0;
+		btn.left = 0;
+		btn.width = '50%';	
+		win.add(btn);
+	}
+	else 
+		win.setLeftNavButton(btn);	
+};
+
 exports.popup = function(){
     var win = Ti.UI.createWindow({
         backgroundColor: 'gray',

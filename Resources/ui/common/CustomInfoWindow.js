@@ -1,13 +1,15 @@
+var common = require('lib/Common');
+
 function CustomInfoWindow(parentWin, doc) {
-	self = Ti.UI.createWindow({
+	var self = Ti.UI.createWindow({
 		title : L('custominfo'),
 		backgroundColor : 'transparent',
 		backgroundImage : 'images/grain.png',
 		barColor : '#6d0a0c'
 	});
 	
-	var button = Ti.UI.createButton({title:L('edit')});
-	self.setRightNavButton(button);
+	var button = Ti.UI.createButton({title:L('edit')});	
+	common.setRightNavButton(self, button);		
 	button.addEventListener('click', function() {
 		var win = require('ui/common/UpdateCustomWindow');
 		parentWin.containingTab.open(new win(parentWin, doc));

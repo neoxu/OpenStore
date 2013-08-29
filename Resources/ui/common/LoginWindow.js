@@ -1,4 +1,11 @@
-var facebook = Titanium.Facebook;
+var facebook;
+
+if (Ti.Platform.osname !== 'mobileweb') {
+	facebook = require('facebook');
+} else {
+	facebook = Titanium.Facebook;
+}
+	
 var http = require('lib/Http');
 var tf1;
 var tf2;
@@ -6,15 +13,9 @@ var tf2;
 function login() {
 	if (tf1.value != '') {
 		if (tf2.value != '') {
-			function callBack(msg) {
-				if (msg == '1') {
-					var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
-					ApplicationTabGroup().open();	
-				} else {
-					if (msg !== '') {
-						Ti.UI.createAlertDialog({title : L('login_error'), message : msg}).show();
-					}
-				}
+			function callBack(msg) {					
+				var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
+				ApplicationTabGroup().open();
 			}
 
 			var data = {};
@@ -26,6 +27,11 @@ function login() {
 			if (!myData) 
 				myData = {};
 				
+			if (myData.account !== tf1.value) {
+				Ti.App.Properties.setObject('docs', {});
+				Ti.App.Properties.setObject('customsData', {});
+			}	
+			
 			myData.account = tf1.value;
 			myData.password = tf2.value;				
 				
@@ -37,11 +43,8 @@ function login() {
 }
 
 function fbLoginSuccess(msg) {
-	if (msg == '1') {
-		var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
-		ApplicationTabGroup().open();	
-	} else
-		Ti.UI.createAlertDialog({title : L('login_error'),	message : L(msg)}).show();
+	var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
+	ApplicationTabGroup().open();
 }	
 			
 function connectfacebook() {	
@@ -73,9 +76,9 @@ function LoginWindow() {
 	
 	tf1 = Ti.UI.createTextField({
 		value: myData.account,
-		height:(Ti.Platform.osname==='android') ? Ti.UI.SIZE : 40,
+		height: Ti.Platform.osname === 'android' ? Ti.UI.SIZE : 40,
 		width: '90%',
-		top:5,
+		top:'2%',
 		keyboardType:Titanium.UI.KEYBOARD_DEFAULT,
 		returnKeyType:Titanium.UI.RETURNKEY_DONE,
 		borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
@@ -85,9 +88,9 @@ function LoginWindow() {
 	
 	tf2 = Ti.UI.createTextField({
 		value: myData.password,
-		height:(Ti.Platform.osname==='android') ? Ti.UI.SIZE : 40,
+		height: Ti.Platform.osname === 'android' ? Ti.UI.SIZE : 40,
 		width: '90%',
-		top:50,
+		top: '14%',
 		keyboardType:Titanium.UI.KEYBOARD_DEFAULT,
 		returnKeyType:Titanium.UI.RETURNKEY_DONE,
 		borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
@@ -97,36 +100,32 @@ function LoginWindow() {
 	self.add(tf2);
 	
 	var loginbtn = Ti.UI.createButton({
-		title:L('login'),
-		height:Ti.UI.SIZE,
+		title: L('login'),
+		height : Ti.Platform.osname === 'android' ? Ti.UI.SIZE : 40,
 		width: '90%',
-		top:95
+		top: '26%',
 	});
 	self.add(loginbtn);	    	
-	loginbtn.addEventListener('click', login);		
+	loginbtn.addEventListener('click', login);			
 		
-	if (facebook.loggedIn) {
-		var fbBtn = Ti.UI.createButton({
-			title : L('fblogin'),
-			height : Ti.UI.SIZE,
-			width : '90%',
-			bottom : 30
-		});
-		fbBtn.addEventListener('click', function() {
-			var data = {email:facebook.uid.toString()};
+	var fbBtn = Ti.UI.createButton({
+		title : L('fblogin'),
+		height : Ti.Platform.osname === 'android' ? Ti.UI.SIZE : 40,
+		width : '90%',
+		bottom : 50
+	});
+	fbBtn.addEventListener('click', function() {
+		if (facebook.loggedIn) {
+			var data = {
+				email : facebook.uid.toString()
+			};
 			http.post('fbLogin', data, fbLoginSuccess);
+		} else {
+			connectfacebook();
+		}
 
-		});
-		self.add(fbBtn);
-	} else {
-		connectfacebook();
-		var fbloginBtn = facebook.createLoginButton({
-			style : facebook.BUTTON_STYLE_WIDE,
-			height : Ti.UI.SIZE,
-			width : '90%',
-			bottom : 30
-		});
-	}
+	});
+	self.add(fbBtn); 
 	
 	return self;
 };

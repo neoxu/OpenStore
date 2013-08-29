@@ -5,11 +5,12 @@ function SettingWindow(page) {
 		barColor : page == 0 ? '#6d0a0c' : '#b89b00'
 	});
 
-	if (Ti.Platform.osname === 'mobileweb') {
+	if (Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'android') {
 		var btn1 = Ti.UI.createButton({
 			title : L('store'),
 			top : 50,
-			left : 50
+			left : 0,
+			width : '50%'
 		});
 		self.add(btn1);
 		btn1.addEventListener('click', function(e) {
@@ -22,9 +23,10 @@ function SettingWindow(page) {
 		});
 
 		var btn2 = Ti.UI.createButton({
-			title : L('custom'),
+			title : L('customs'),
 			top : 50,
-			left : 150
+			left : '50%',
+			width : '50%'
 		});
 		self.add(btn2);
 		btn2.addEventListener('click', function(e) {

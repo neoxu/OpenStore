@@ -1,4 +1,5 @@
 var http = require('lib/Http');
+var common = require('lib/Common');
 var scrollView;
 var picker;
 var rowIndex0 = 0;
@@ -46,22 +47,18 @@ function updateReservation() {
 	}
 }
 
-function findSuccess(msg) {
-	if (msg == 'se41') {
-
-	} else {
-		if (msg !== '' || scrollView.views) {
-			var docs = JSON.parse(msg);
-			for (var i = 0; i < docs.length; i++) {
-				for (var j = 0; j < scrollView.views.length; j ++) {
-					if (scrollView.views[j].tableView.headerTitle == docs[i].date) {
-						var text = docs[i].h + ':' + docs[i].m + ' ' + docs[i].custom + ' ' + docs[i].project; 
-						scrollView.views[j].tableView.appendRow({title : text, data: docs[i]});
-					}				
+function findSuccess(msg) { 	
+	if (msg.doc && scrollView.views) {
+		var docs = msg.doc;
+		for (var i = 0; i < docs.length; i++) {
+			for (var j = 0; j < scrollView.views.length; j++) {
+				if (scrollView.views[j].tableView.headerTitle == docs[i].date) {
+					var text = docs[i].h + ':' + docs[i].m + ' ' + docs[i].custom + ' ' + docs[i].project;
+					scrollView.views[j].tableView.appendRow({title : text, data : docs[i]});
 				}
 			}
 		}
-	}
+	}	
 } 
 	
 function ReservationWindow() {	
@@ -72,31 +69,26 @@ function ReservationWindow() {
 		barColor: '#6d0a0c'		
 	});		
 		
-	var addBtn = Ti.UI.createButton({title:L('add')});
+	var addBtn = Ti.UI.createButton({title:L('add')});			
+	common.setRightNavButton(self, addBtn);	
 	addBtn.addEventListener('click', updateReservation);
-	self.setRightNavButton(addBtn);	
 	
-	var editBtn = Ti.UI.createButton({title:L('edit')});
-	var cancelBtn = Titanium.UI.createButton({title:L('cancel')});
-	
-	self.setLeftNavButton(editBtn);	
-	editBtn.addEventListener('click', function()
-	{
-		self.setLeftNavButton(cancelBtn);		
-		for (var i = 0; i < scrollView.views.length; i ++) {
-			scrollView.views[i].tableView.editing = true;
-			//scrollView.views[i].tableView.moving = true;
+	var editBtn = Ti.UI.createButton({title:L('edit')});	
+	common.setLeftNavButton(self, editBtn);	
+	editBtn.addEventListener('click', function() {
+		if (this.title === L('edit')) {
+			this.title = L('cancel');
+
+			for (var i = 0; i < scrollView.views.length; i++) {
+				scrollView.views[i].tableView.editing = true;
+			}
+		} else {
+			this.title = L('edit');
+			for (var i = 0; i < scrollView.views.length; i++) {
+				scrollView.views[i].tableView.editing = false;
+			}
 		}
-	});	
-	
-	cancelBtn.addEventListener('click', function()
-	{
-		self.setLeftNavButton(editBtn);
-		for (var i = 0; i < scrollView.views.length; i ++) {
-			scrollView.views[i].tableView.editing = false;
-			//scrollView.views[i].tableView.moving = false;
-		}
-	});	
+	});
 	
 	scrollView = Ti.UI.createScrollableView();
 	
@@ -119,9 +111,7 @@ function ReservationWindow() {
 			var doc = {date:e.row.data.date, custom: e.row.data.custom};
 			http.post('removeReservation', doc, removeFinish);
 			
-			function removeFinish() {
-				
-			}
+			function removeFinish() {}
 		}
 		tabView.addEventListener('delete', removeReservation);
 		
@@ -210,7 +200,8 @@ function ReservationWindow() {
 				}
 			}
 			
-			picker.reloadColumn(0);
+			if (Ti.Platform.osname !== 'android')
+				picker.reloadColumn(0);
 		}
 	}
 	Ti.App.addEventListener('updatePickerRow', updatePickerRow);

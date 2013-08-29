@@ -3,21 +3,16 @@ var tfay = new Array(2);
 var data = {};
 var win;
 
-function updateStoreSuccess(msg) {
-	if (msg == '1') {
-		var storesData = Ti.App.Properties.getObject('storesData');
-		if (storesData == null) 
-			storesData = [];
+function updateStoreSuccess(msg) {		
+	var storesData = Ti.App.Properties.getObject('storesData');
+	if (storesData == null)
+		storesData = [];
 
-		storesData.push(data);
-		Ti.App.Properties.setObject('storesData', storesData);
-		
-		Ti.App.fireEvent('addStores', data);
-		win.close();
-	}
-	else {
-		
-	}
+	storesData.push(data);
+	Ti.App.Properties.setObject('storesData', storesData);
+
+	Ti.App.fireEvent('addStores', data);
+	win.close(); 	
 }
 
 function updateStore() {	
@@ -101,8 +96,8 @@ function OpenStoreWindow(parentWin) {
 	});		
 	
 	var addBtn = Ti.UI.createButton({title:L('add')});
-	addBtn.addEventListener('click', updateStore);
-	win.setRightNavButton(addBtn);	
+	common.setRightNavButton(win, addBtn);		
+	addBtn.addEventListener('click', updateStore);	
 		
 	var scrollView = Ti.UI.createScrollView({  
 		contentWidth: 'auto',

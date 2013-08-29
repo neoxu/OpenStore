@@ -65,14 +65,18 @@ function importContacts() {
         }        
         
         var user = {};
-        user['name'] = c.fullName;
+        if (c.fullName)
+        	user['name'] = c.fullName;
+        	
         user['phone'] = phone;
         user['email'] = email;
-        user['pic_square'] = c.image;        
+        
+        if (c.image)
+        	user['pic_square'] = c.image;        
        
 		var tvRow = common.createTableViewRow(user);		
 		
-		if (customsData[c.fullName] == undefined) {
+		if (c.fullName && customsData[c.fullName] == undefined) {
 			tvRow.addEventListener('click', rowClick);
 			tvRow.addEventListener('touch', rowClick);
 			sectionContacts.add(tvRow);
@@ -180,34 +184,32 @@ function importData() {
 		http.post('updateCustoms', sendData, callBack);
 	}
 
-	function callBack(msg) {
-		if (msg == '1') {
-			while (facebookRows.length > 0) {
-				var row2 = facebookRows.pop();
-				sectionFacebook.remove(row2);
-				sectionImported.add(row2);
-			}	
-			
-			while (contactsRows.length > 0) {
-				var row2 = contactsRows.pop();
-				sectionContacts.remove(row2);
-				sectionImported.add(row2);
-			}	
-			
-			initTableView();
-						
-			var docs = Ti.App.Properties.getObject('docs');
-			var customsData = Ti.App.Properties.getObject('customsData');
-			
-			for (var i = 0; i < senddocs.length; i ++) {
-				docs.push(senddocs[i]);
-				customsData[senddocs[i].name] = senddocs[i];				
-			}			
-			
-			Ti.App.Properties.setObject('docs', docs);
-			Ti.App.Properties.setObject('customsData', customsData); 
-			Ti.App.fireEvent("updateClientCustoms");
+	function callBack(msg) {			
+		while (facebookRows.length > 0) {
+			var row2 = facebookRows.pop();
+			sectionFacebook.remove(row2);
+			sectionImported.add(row2);
 		}
+
+		while (contactsRows.length > 0) {
+			var row2 = contactsRows.pop();
+			sectionContacts.remove(row2);
+			sectionImported.add(row2);
+		}
+
+		initTableView();
+
+		var docs = Ti.App.Properties.getObject('docs');
+		var customsData = Ti.App.Properties.getObject('customsData');
+
+		for (var i = 0; i < senddocs.length; i++) {
+			docs.push(senddocs[i]);
+			customsData[senddocs[i].name] = senddocs[i];
+		}
+
+		Ti.App.Properties.setObject('docs', docs);
+		Ti.App.Properties.setObject('customsData', customsData);
+		Ti.App.fireEvent("updateClientCustoms");		
 	}
 }
 
@@ -229,13 +231,11 @@ function ImportWindow() {
 	self.add(tableView);		
 	
 	var button = Ti.UI.createButton({title : L('add')});
-	button.addEventListener('click', importData);
-	self.setRightNavButton(button);	
+	common.setRightNavButton(self, button);			
+	button.addEventListener('click', importData);	
 	
-	//import from facebook
 	importFacebook();
 	
-	//import from addressbook
 	importContacts();
 	
 	return self;

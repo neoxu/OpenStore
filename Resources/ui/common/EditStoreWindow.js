@@ -6,24 +6,25 @@ var sectionMembers;
 var tf;
 
 function updateInviteMember(msg) {			
-	if (msg !== '0') {
-		var user = {};
-		user['name'] = msg;		
-		var tvRow = common.createTableViewRow(user);		
-		
-		if (!sectionWaiting)
-			sectionWaiting = Ti.UI.createTableViewSection({headerTitle : L('waiting')});
-			
-		sectionWaiting.add(tvRow);
-		tableView.setData([sectionWaiting, sectionMembers]);			
-		
-		var m = {account: tf.value, name : user.name};
-		Ti.App.fireEvent('updateWaiting', m);		
-		tf.value = '';	
-		tf.blur();	
-	}
-	else
-	  Ti.UI.createAlertDialog({title : L('invite_error'),message : L(msg)}).show();
+	var user = {};
+	user['name'] = msg.doc;
+	var tvRow = common.createTableViewRow(user);
+
+	if (!sectionWaiting)
+		sectionWaiting = Ti.UI.createTableViewSection({
+			headerTitle : L('waiting')
+		});
+
+	sectionWaiting.add(tvRow);
+	tableView.setData([sectionWaiting, sectionMembers]);
+
+	var m = {
+		account : tf.value,
+		name : user.name
+	};
+	Ti.App.fireEvent('updateWaiting', m);
+	tf.value = '';
+	tf.blur();
 }
 
 exports.settingMember = function(storeData) {
@@ -34,8 +35,8 @@ exports.settingMember = function(storeData) {
 		barColor : '#6d0a0c'
 	});
 	
-	var closeBtn = Ti.UI.createButton({title:L('close')});
-	self.setLeftNavButton(closeBtn);
+	var closeBtn = Ti.UI.createButton({title:L('close')});	
+	common.setLeftNavButton(self, closeBtn);		
 	closeBtn.addEventListener('click', function() {		
 		self.close();
 	});
@@ -48,7 +49,7 @@ exports.settingMember = function(storeData) {
 	var canEdit = myData.account === storeData.owner;
 	if (canEdit) {
 		var addbtn = Ti.UI.createButton({title : L('add')});
-		self.setRightNavButton(addbtn);
+		common.setRightNavButton(self, addbtn);			
 		addbtn.addEventListener('click', function() {
 			if (tf.value !== '') {
 			var doc = {};
@@ -107,13 +108,13 @@ exports.settingTime = function(storeData) {
 	});
 	
 	var closeBtn = Ti.UI.createButton({title:L('close')});
-	self.setLeftNavButton(closeBtn);
+	common.setLeftNavButton(self, closeBtn);		
 	closeBtn.addEventListener('click', function() {		
 		self.close();
 	});		
 	
 	var setBtn = Ti.UI.createButton({title:L('setting')});
-	self.setRightNavButton(setBtn);
+	common.setRightNavButton(self, setBtn);		
 	setBtn.addEventListener('click', function() {
 		var doc = {
 			owner: storeData.owner, 

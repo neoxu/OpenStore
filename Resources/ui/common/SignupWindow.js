@@ -12,9 +12,9 @@ function SignupWindow() {
 	
 	for (var i = 0; i < tfay.length; i++) {
 		tfay[i] = Ti.UI.createTextField({
-			height : 40,
+			height : Ti.Platform.osname === 'android' ? Ti.UI.SIZE : 40,
 			width : '90%',
-			top : 45 * i + 5,
+			top : (i*12+2) + '%',
 			keyboardType : Titanium.UI.KEYBOARD_DEFAULT,
 			returnKeyType : Titanium.UI.RETURNKEY_DONE,
 			borderStyle : Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
@@ -29,9 +29,9 @@ function SignupWindow() {
 	
 	var btn = Ti.UI.createButton({
 		title:L('signup'),
-		height:Ti.UI.SIZE,
+		height : Ti.Platform.osname === 'android' ? Ti.UI.SIZE : 40,
 		width: '90%',
-		top:230
+		bottom : 50
 	});
 	self.add(btn);		
     	
@@ -39,22 +39,20 @@ function SignupWindow() {
 		if (tfay[0].value != '') {
 			if (tfay[1].value != '') {
 				if (tfay[1].value == tfay[2].value) {
-					function callBack(msg) {						
-						if (msg == '1') {					
-							var myData = Ti.App.Properties.getObject('myData');
-							if (!myData)
-								myData = {};
-								
-							myData.account = tfay[0].value;
-							myData.password = tfay[1].value;
-							
-							Ti.App.Properties.setObject('myData', myData);
-								
-							var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
-							ApplicationTabGroup().open();	
-						}
-						else
-						  	Ti.UI.createAlertDialog({title:L('Signup_error'), message:L(msg)}).show();						
+					function callBack(msg) {								
+						var myData = Ti.App.Properties.getObject('myData');
+						if (!myData)
+							myData = {};
+
+						myData.account = tfay[0].value;
+						myData.password = tfay[1].value;
+
+						Ti.App.Properties.setObject('myData', myData);
+						Ti.App.Properties.setObject('docs', {});
+						Ti.App.Properties.setObject('customsData', {});
+
+						var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
+						ApplicationTabGroup().open();											
 					}					
 				    	    
 				    var data = {};

@@ -7,6 +7,8 @@
 	<string name="openWindow">Open New Window</string>
 	<string name="newWindow">New Window</string>	
 	<string name="user_login">User Login</string>
+	<string name="email_addr">Enter email</string>
+	<string name="password">Enter password</string>
 	<string name="login">Login</string>
 	<string name="fblogin">Facebook Login</string>	
 	<string name="user_signup">User Sign up</string>
@@ -70,6 +72,7 @@
 	<string name="login_error">Loggin Error</string>	
 	<string name="insert_error">Insert Error</string>	
 	<string name="invite_error">Invite Error</string>	
+	<string name="error">Error</string>	
 	<string name="ce1">Please enter your email</string>	
 	<string name="ce2">Please enter your password</string>		
 	<string name="ce3">Please confirm your password</string>
@@ -91,6 +94,7 @@
 	<string name="searchhintstore">Enter store's name</string>	
 	<string name="history">History</string>	
 	<string name="waiting_accept">Waiting for accept</string>	
-	<string name="rest">close</string>	
+	<string name="back">Back</string>	
+	<string name="rest">Close</string>	
 	<string name="book">Book</string>	
 </resources>

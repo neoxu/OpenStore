@@ -1,36 +1,32 @@
 var http = require('lib/Http');
+var common = require('lib/Common');
 var tfay = new Array(10);
 var data = {};
 var self;
 var docName;
 
-function updateFinish(msg) {
-	if (msg == '1') {			
-		var customsData = Ti.App.Properties.getObject('customsData');
-		var docs = Ti.App.Properties.getObject('docs');
-		
-		if (customsData[data.name] == undefined) {				
-			docs.push(data);
-		}
-		else
-		{
-			for (var i = 0; i < docs.length; i ++) {
-				if (docs[i].name == data.name) {
-					docs[i] = data;
-					break;
-				}				
+function updateFinish(msg) {		
+	var customsData = Ti.App.Properties.getObject('customsData');
+	var docs = Ti.App.Properties.getObject('docs');
+
+	if (customsData[data.name] == undefined) {
+		docs.push(data);
+	} else {
+		for (var i = 0; i < docs.length; i++) {
+			if (docs[i].name == data.name) {
+				docs[i] = data;
+				break;
 			}
 		}
-		
-		customsData[data.name] = data;
-		Ti.App.Properties.setObject('customsData', customsData);
-		Ti.App.Properties.setObject('docs', docs);
-		
-		Ti.App.fireEvent("updateInfoWin", data);
-		Ti.App.fireEvent("updateClientCustoms");
-		self.close();
-	} else
-		Ti.UI.createAlertDialog({title : L('insert_error'),message : L(msg)}).show();
+	}
+
+	customsData[data.name] = data;
+	Ti.App.Properties.setObject('customsData', customsData);
+	Ti.App.Properties.setObject('docs', docs);
+
+	Ti.App.fireEvent("updateInfoWin", data);
+	Ti.App.fireEvent("updateClientCustoms");
+	self.close(); 
 }
 
 function updateCustoms(e) {
@@ -64,12 +60,10 @@ function updateCustoms(e) {
 		Ti.UI.createAlertDialog({title : L('insert_error'), message : L('ce21')}).show();
 }
 
-function RemoveFinish(msg) {
-	if (msg == '1') {
-		Ti.App.fireEvent("askServerCustoms");
-		Ti.App.fireEvent("closeInfoWin");
-		self.close();
-	}
+function RemoveFinish(msg) {		
+	Ti.App.fireEvent("askServerCustoms");
+	Ti.App.fireEvent("closeInfoWin");
+	self.close(); 
 }
 	
 function UpdateCustomWindow(parentWin, doc) {   
@@ -80,18 +74,18 @@ function UpdateCustomWindow(parentWin, doc) {
 		barColor : '#6d0a0c'
 	});
 	
-	var button = Ti.UI.createButton({title:L('Done')});
+	var button = Ti.UI.createButton({title:L('Done')});	
+	common.setRightNavButton(self, button);	
 	button.addEventListener('click', updateCustoms);	
-	self.setRightNavButton(button);
 	
 	var scrollView = Ti.UI.createScrollView();
 	self.add(scrollView);
 	
 	for (var i=0; i < tfay.length; i ++) {
 		tfay[i] = Ti.UI.createTextField({
-			height : 40,
+			height : Ti.Platform.osname === 'android' ? Ti.UI.SIZE : 40,
 			width : '90%',
-			top : i*45 + 5,
+			top : (i*11+1) + '%',
 			keyboardType : Titanium.UI.KEYBOARD_DEFAULT,
 			returnKeyType : Titanium.UI.RETURNKEY_DONE,
 			borderStyle : Titanium.UI.INPUT_BORDERSTYLE_ROUNDED, 

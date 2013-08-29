@@ -1,3 +1,5 @@
+var common = require('lib/Common');
+
 function ApplicationWindow() {
 	var self = Ti.UI.createWindow({
 		title: L('history'),
@@ -5,18 +7,9 @@ function ApplicationWindow() {
 		barColor: '#b89b00'		
 	});
 	
-	var button = Ti.UI.createButton({
-		title:L('add'),
-		top:5
-	});
-	self.setRightNavButton(button);
-	button.addEventListener('click', function() {
-		self.containingTab.open(Ti.UI.createWindow({
-			title: L('newWindow'),
-			backgroundImage: 'images/grain.png',
-		    barColor: '#6d0a0c'	
-		}));
-	});	
+	var button = Ti.UI.createButton({title:L('add')});
+	common.setRightNavButton(self, button);		
+	button.addEventListener('click', function() {});	
 
 	return self;
 };

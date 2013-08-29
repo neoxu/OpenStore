@@ -7,7 +7,7 @@ function findWorks(name) {
 	var doc = {name : name};
 	http.post('findWorks', doc, function(msg) {
 		storesSection = Ti.UI.createTableViewSection();
-		var docs = JSON.parse(msg);
+		var docs = msg.doc;
 		docs.forEach(function(work) {
 			var row = common.createTableViewRow(work);
 			storesSection.add(row);
@@ -40,7 +40,7 @@ function UpdateWorkWindow() {
 			hintText : L('searchhintstore'),
 			showBookmark : true,
 			showCancel : true,
-			height : 38,
+			height : Ti.Platform.osname === 'android' ? 80 : 40,
 			top : 0
 		});
 		
@@ -63,7 +63,7 @@ function UpdateWorkWindow() {
 	self.add(tableView);
 	
 	http.get('findAllStores', function(msg) {
-		var docs = JSON.parse(msg) ;
+		var docs = msg.doc;
 		
 		for (var i in docs) {
 			var user = docs[i];
@@ -77,8 +77,9 @@ function UpdateWorkWindow() {
 				rowData : user
 			});
 
-			var btn = Ti.UI.createButton({
+			/*var btn = Ti.UI.createButton({
 				title:L('book'),
+				height : Ti.Platform.osname === 'android' ? Ti.UI.SIZE : 40,
 				left: 10,
 				width: 50,
 				top: 50
@@ -86,7 +87,7 @@ function UpdateWorkWindow() {
 			tvRow.add(btn);
 			btn.addEventListener('click', function(e) {						
 				popupWin.open();
-			});
+			});*/
 			
 			var imageView = Ti.UI.createImageView({
 				image : user.pic_square,

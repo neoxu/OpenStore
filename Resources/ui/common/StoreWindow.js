@@ -15,21 +15,15 @@ function updateWaiting(user) {
 	scrollView.views[scrollView.currentPage].storeData = storeData;
 }
 
-function initStore(msg) {
-	if (msg == 'se41') {
-		Ti.UI.createAlertDialog({title : L('store_error'), message : L(msg)}).show();
-	} else {				
-		if (msg !== '') {	
-			var docs = JSON.parse(msg);		
-			docs.forEach(function(doc) {			
-				var view = common.createStoreView(doc);
-				scrollView.addView(view);		
-				scrollView.currentPage = scrollView.views.length-1;
-			});				
-			
-			Ti.App.Properties.setObject('storesData', docs);
-		}
-	}
+function initStore(msg) {		
+	var docs = msg.doc;
+	docs.forEach(function(doc) {
+		var view = common.createStoreView(doc);
+		scrollView.addView(view);
+		scrollView.currentPage = scrollView.views.length - 1;
+	});
+
+	Ti.App.Properties.setObject('storesData', docs); 
 }
 
 function addStore(store) {
@@ -47,7 +41,7 @@ function StoreWindow() {
 	});		
 	
 	var addBtn = Ti.UI.createButton({title:L('add')});
-	self.setRightNavButton(addBtn);	
+	common.setRightNavButton(self, addBtn);			
 	addBtn.addEventListener('click', function(){
 		Ti.App.Properties.setObject('membersData', {});
 		var win = require('ui/common/OpenStoreWindow');
@@ -59,8 +53,8 @@ function StoreWindow() {
 		title : L('managestore')
 	};		
 
-	var editBtn = Ti.UI.createButton({title:L('setting')});
-	self.setLeftNavButton(editBtn);	
+	var editBtn = Ti.UI.createButton({title:L('setting')});	
+	common.setLeftNavButton(self, editBtn);
 	editBtn.addEventListener('click', function(){
 		if (scrollView.views && scrollView.currentPage >= 0) {
 			var dialog = Ti.UI.createOptionDialog(opts);
