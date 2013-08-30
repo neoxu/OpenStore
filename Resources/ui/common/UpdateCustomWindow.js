@@ -85,7 +85,7 @@ function UpdateCustomWindow(parentWin, doc) {
 		tfay[i] = Ti.UI.createTextField({
 			height : Ti.Platform.osname === 'android' ? Ti.UI.SIZE : 40,
 			width : '90%',
-			top : (i*11+1) + '%',
+			top : (i*45)+5,
 			keyboardType : Titanium.UI.KEYBOARD_DEFAULT,
 			returnKeyType : Titanium.UI.RETURNKEY_DONE,
 			borderStyle : Titanium.UI.INPUT_BORDERSTYLE_ROUNDED, 

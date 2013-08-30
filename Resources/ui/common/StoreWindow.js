@@ -17,13 +17,16 @@ function updateWaiting(user) {
 
 function initStore(msg) {		
 	var docs = msg.doc;
-	docs.forEach(function(doc) {
-		var view = common.createStoreView(doc);
-		scrollView.addView(view);
-		scrollView.currentPage = scrollView.views.length - 1;
-	});
+	
+	if (docs) {
+		docs.forEach(function(doc) {
+			var view = common.createStoreView(doc);
+			scrollView.addView(view);
+			scrollView.currentPage = scrollView.views.length - 1;
+		});
 
-	Ti.App.Properties.setObject('storesData', docs); 
+		Ti.App.Properties.setObject('storesData', docs);
+	} 
 }
 
 function addStore(store) {

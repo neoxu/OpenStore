@@ -1,4 +1,5 @@
 var http = require('lib/Http');
+var common = require('lib/Common');
 var tfay = new Array(2);
 var data = {};
 var win;
